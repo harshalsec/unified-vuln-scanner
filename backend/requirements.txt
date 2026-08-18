@@ -9,3 +9,4 @@ asyncpg==0.29.0
 alembic==1.13.2
 python-multipart==0.0.9
 websockets==13.0.1
+dnspython==2.6.1
