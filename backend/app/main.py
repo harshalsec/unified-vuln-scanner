@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
 from app.api.routes import jobs
+from app.api.websockets import scan as ws_scan
 
 settings = get_settings()
 
@@ -21,8 +22,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
+# REST routes
 app.include_router(jobs.router, prefix=settings.API_PREFIX)
+
+# WebSocket routes
+app.include_router(ws_scan.router)
 
 @app.get("/")
 async def root():
