@@ -1,4 +1,4 @@
-from app.engines import SubdomainTakeoverEngine, ReflectedXSSEngine
+from app.engines import SubdomainTakeoverEngine, ReflectedXSSEngine, BOLAEngine
 from app.schemas.domain import EngineResult, EngineType, Job
 from app.services.job_service import job_service
 
@@ -14,6 +14,10 @@ async def run_engine_for_job(job: Job) -> EngineResult:
 
     elif job.engine == EngineType.REFLECTED_XSS:
         engine = ReflectedXSSEngine(job)
+        result = await engine.run()
+
+    elif job.engine == EngineType.BOLA:
+        engine = BOLAEngine(job)
         result = await engine.run()
 
     else:
