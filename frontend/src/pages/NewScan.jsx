@@ -63,7 +63,7 @@ export default function NewScan() {
   return (
     <div className="max-w-2xl mx-auto">
       <h1 className="text-3xl font-bold mb-2">New Scan</h1>
-      <p className="text-gray-400 mb-8">Configure and launch a vulnerability scan</p>
+      <p className="text-gray-400 mb-8">Configure and launch a new vulnerability assessment</p>
 
       <form onSubmit={handleSubmit} className="bg-gray-900 border border-gray-800 rounded-xl p-6 space-y-6">
         

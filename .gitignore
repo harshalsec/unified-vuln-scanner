@@ -27,6 +27,10 @@ htmlcov/
 *.pem
 *.key
 secrets/
+*.env
+backend/.env
+*.pyc
+node_modules/
 
 # IDE
 .vscode/

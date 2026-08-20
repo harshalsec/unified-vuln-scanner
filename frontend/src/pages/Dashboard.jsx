@@ -100,8 +100,20 @@ export default function Dashboard() {
         {loading ? (
           <div className="p-8 text-center text-gray-400">Loading...</div>
         ) : jobs.length === 0 ? (
-          <div className="p-8 text-center text-gray-400">
-            No scans yet. Create your first scan.
+          <div className="p-12 text-center">
+            <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Shield className="w-7 h-7 text-gray-500" />
+            </div>
+            <h3 className="text-lg font-medium text-gray-300 mb-1">No scans yet</h3>
+            <p className="text-gray-500 text-sm mb-5">
+              Start your first vulnerability scan to see results here.
+            </p>
+            <Link
+              to="/new-scan"
+              className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg text-sm font-medium transition"
+            >
+              Create New Scan
+            </Link>
           </div>
         ) : (
           <div className="overflow-x-auto">

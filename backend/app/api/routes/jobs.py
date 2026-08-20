@@ -14,8 +14,14 @@ async def create_job(job_create: JobCreate):
     """
     Create a new vulnerability scan job.
     """
-    job = job_service.create_job(job_create)
-    return job
+    try:
+        job = job_service.create_job(job_create)
+        return job
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Unable to create job. Please check your input.",
+        )
 
 @router.get("/", response_model=List[Job])
 async def list_jobs():
@@ -37,9 +43,6 @@ async def get_job(job_id: UUID):
         )
     return job
 
-from app.services.engine_runner import run_engine_for_job
-from app.schemas.domain import EngineResult
-
 @router.post("/{job_id}/run", response_model=EngineResult)
 async def run_job(job_id: UUID):
     """
@@ -47,11 +50,22 @@ async def run_job(job_id: UUID):
     """
     job = job_service.get_job(job_id)
     if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Job not found",
+        )
 
     if job.status == JobStatus.RUNNING:
-        raise HTTPException(status_code=400, detail="Job is already running")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Job is already running",
+        )
 
-    result = await run_engine_for_job(job)
-    return result
-
+    try:
+        result = await run_engine_for_job(job)
+        return result
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Scan failed due to an internal error.",
+        )
