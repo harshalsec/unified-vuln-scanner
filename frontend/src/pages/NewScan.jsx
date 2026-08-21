@@ -13,6 +13,8 @@ export default function NewScan() {
     timeout_seconds: 30,
     low_privilege_token: "",
     high_privilege_token: "",
+    use_ai_payloads: true,
+    depth: "normal",
   });
 
   const handleChange = (e) => {
@@ -29,7 +31,10 @@ export default function NewScan() {
         engine: form.engine,
         target: form.target,
         additional_targets: [],
-        options: {},
+        options: {
+          use_ai_payloads: form.use_ai_payloads,
+          depth: form.depth,
+        },
         timeout_seconds: Number(form.timeout_seconds),
       };
 
@@ -95,6 +100,40 @@ export default function NewScan() {
             className="w-full bg-gray-950 border border-gray-700 rounded-lg px-4 py-2.5 focus:outline-none focus:border-emerald-500"
           />
         </div>
+        {/* AI + Depth options for XSS */}
+        {form.engine === "reflected_xss" && (
+          <div className="bg-gray-950 border border-gray-700 rounded-lg p-4 space-y-4">
+            <div className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                id="use_ai_payloads"
+                name="use_ai_payloads"
+                checked={form.use_ai_payloads}
+                onChange={(e) =>
+                  setForm({ ...form, use_ai_payloads: e.target.checked })
+                }
+                className="w-4 h-4 accent-emerald-500"
+              />
+              <label htmlFor="use_ai_payloads" className="text-sm font-medium">
+                Use AI-assisted XSS payloads
+              </label>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">Scan Depth</label>
+              <select
+                name="depth"
+                value={form.depth}
+                onChange={handleChange}
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 focus:outline-none focus:border-emerald-500"
+              >
+                <option value="fast">Fast</option>
+                <option value="normal">Normal</option>
+                <option value="deep">Deep</option>
+              </select>
+            </div>
+          </div>
+        )}
 
         {/* BOLA specific fields */}
         {form.engine === "bola" && (

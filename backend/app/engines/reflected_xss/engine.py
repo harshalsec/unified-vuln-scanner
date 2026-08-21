@@ -9,6 +9,7 @@ import httpx
 from app.engines.base import ScanEngine
 from app.schemas.domain import EngineResult, EngineType, Finding, Job, Severity
 from app.engines.reflected_xss.payloads import XSS_PAYLOADS
+from app.engines.reflected_xss.ai_payloads import get_smart_payloads
 
 logger = logging.getLogger("ReflectedXSSEngine")
 logging.basicConfig(level=logging.INFO)
@@ -25,11 +26,11 @@ class ReflectedXSSEngine(ScanEngine):
 
         depth = job.options.get("depth", "normal")
         if depth == "fast":
-            self.max_payloads_per_param = 4
+            self.max_payloads_per_param = 6
         elif depth == "deep":
-            self.max_payloads_per_param = 12
+            self.max_payloads_per_param = 15
         else:
-            self.max_payloads_per_param = 7
+            self.max_payloads_per_param = 10
 
     @property
     def engine_type(self) -> EngineType:
@@ -47,7 +48,15 @@ class ReflectedXSSEngine(ScanEngine):
             if not params:
                 params = ["q", "search", "id", "query"]
 
-            payloads = XSS_PAYLOADS[:self.max_payloads_per_param]
+            # Use AI-assisted payloads when enabled
+            use_ai = self.job.options.get("use_ai_payloads", True)
+
+            if use_ai:
+                depth = self.job.options.get("depth", "normal")
+                payloads = get_smart_payloads(depth=depth)
+                logger.info(f"[{self.job_id}] Using AI-assisted payloads ({len(payloads)} generated)")
+            else:
+                payloads = XSS_PAYLOADS[:self.max_payloads_per_param]
 
             async with httpx.AsyncClient(
                 follow_redirects=True,
