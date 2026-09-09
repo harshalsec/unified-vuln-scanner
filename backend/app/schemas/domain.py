@@ -13,7 +13,10 @@ class EngineType(str, Enum):
     BOLA = "bola"
     SUBDOMAIN_TAKEOVER = "subdomain_takeover"
     REFLECTED_XSS = "reflected_xss"
-
+    SECURITY_HEADERS = "security_headers"
+    OPEN_REDIRECT = "open_redirect"
+    SQL_INJECTION = "sql_injection"
+    
 class JobStatus(str, Enum):
     PENDING = "pending"
     RUNNING = "running"

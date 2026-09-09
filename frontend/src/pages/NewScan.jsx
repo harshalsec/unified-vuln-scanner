@@ -81,11 +81,14 @@ export default function NewScan() {
             onChange={handleChange}
             className="w-full bg-gray-950 border border-gray-700 rounded-lg px-4 py-2.5 focus:outline-none focus:border-emerald-500"
           >
-            <option value="reflected_xss">Reflected XSS</option>
-            <option value="subdomain_takeover">Subdomain Takeover</option>
-            <option value="bola">BOLA / IDOR</option>
+          <option value="reflected_xss">Reflected XSS</option>
+          <option value="subdomain_takeover">Subdomain Takeover</option>
+          <option value="bola">BOLA / IDOR</option>
+          <option value="security_headers">Security Headers</option>
+          <option value="open_redirect">Open Redirect</option>
+          <option value="sql_injection">SQL Injection</option>
           </select>
-        </div>
+        </div>  
 
         {/* Target */}
         <div>

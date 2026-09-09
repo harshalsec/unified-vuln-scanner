@@ -1,5 +1,12 @@
 import asyncio
-from app.engines import SubdomainTakeoverEngine, ReflectedXSSEngine, BOLAEngine
+from app.engines import (
+    SubdomainTakeoverEngine,
+    ReflectedXSSEngine,
+    BOLAEngine,
+    SecurityHeadersEngine,
+    OpenRedirectEngine,
+    SQLInjectionEngine,
+)
 from app.schemas.domain import EngineResult, EngineType, Job, JobStatus
 from app.services.job_service import job_service
 from app.services.connection_manager import manager
@@ -27,6 +34,12 @@ async def run_engine_for_job(job: Job) -> EngineResult:
         engine = ReflectedXSSEngine(job)
     elif job.engine == EngineType.BOLA:
         engine = BOLAEngine(job)
+    elif job.engine == EngineType.SECURITY_HEADERS:
+        engine = SecurityHeadersEngine(job)
+    elif job.engine == EngineType.OPEN_REDIRECT:
+        engine = OpenRedirectEngine(job)
+    elif job.engine == EngineType.SQL_INJECTION:
+        engine = SQLInjectionEngine(job)
     else:
         result = EngineResult(
             job_id=job.id,
