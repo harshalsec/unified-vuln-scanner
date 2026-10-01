@@ -6,6 +6,7 @@ import time
 
 from app.config import get_settings
 from app.api.routes import jobs
+from app.api.routes import chat
 from app.api.websockets import scan as ws_scan
 
 settings = get_settings()
@@ -92,6 +93,7 @@ async def rate_limit_middleware(request: Request, call_next):
 # ----------------------
 app.include_router(jobs.router, prefix=settings.API_PREFIX)
 app.include_router(ws_scan.router)
+app.include_router(chat.router, prefix=settings.API_PREFIX)
 
 @app.get("/")
 async def root():

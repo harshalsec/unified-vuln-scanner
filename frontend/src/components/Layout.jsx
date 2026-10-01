@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Shield, LayoutDashboard, PlusCircle } from "lucide-react";
+import { Shield, LayoutDashboard, PlusCircle, MessageSquare } from "lucide-react";
 
 export default function Layout({ children }) {
   const location = useLocation();
@@ -40,6 +40,17 @@ export default function Layout({ children }) {
             >
               <PlusCircle className="w-4 h-4" />
               New Scan
+            </Link>
+            <Link
+              to="/chat"
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition ${
+                isActive("/chat")
+                  ? "bg-gray-800 text-white"
+                  : "text-gray-400 hover:text-white hover:bg-gray-800/50"
+              }`}
+            >
+              <MessageSquare className="w-4 h-4" />
+              AI Chat
             </Link>
           </div>
         </div>

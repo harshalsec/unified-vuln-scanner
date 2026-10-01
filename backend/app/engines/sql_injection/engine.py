@@ -8,6 +8,7 @@ import httpx
 from app.engines.base import ScanEngine
 from app.schemas.domain import EngineResult, EngineType, Finding, Job, Severity
 from app.engines.sql_injection.payloads import SQLI_PAYLOADS
+from app.engines.sql_injection.ai_payloads import get_smart_sqli_payloads
 
 logger = logging.getLogger("SQLInjectionEngine")
 logging.basicConfig(level=logging.INFO)
@@ -61,7 +62,15 @@ class SQLInjectionEngine(ScanEngine):
             if not params:
                 params = ["id", "q", "search"]
 
-            payloads = SQLI_PAYLOADS[: self.max_payloads]
+            # AI-assisted payloads enabled by default
+            use_ai = self.job.options.get("use_ai_payloads", True)
+            depth = self.job.options.get("depth", "normal")
+
+            if use_ai:
+                payloads = get_smart_sqli_payloads(depth=depth)
+                logger.info(f"[{self.job_id}] Using AI-assisted SQLi payloads ({len(payloads)} generated)")
+            else:
+                payloads = SQLI_PAYLOADS[: self.max_payloads]
 
             async with httpx.AsyncClient(
                 follow_redirects=True,
